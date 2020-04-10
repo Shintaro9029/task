@@ -1,4 +1,6 @@
 class Admin::UsersController < ApplicationController
+  before_action :require_admin
+  
   def index
     @q = User.ransack(params[:q])
     @users = @q.result.eager_load(:tasks).page(params[:page])
@@ -51,6 +53,6 @@ class Admin::UsersController < ApplicationController
   end
 
   def require_admin
-    redirect_to root_path unless current_user.admin?
+    raise Forbidden unless current_user.admin?
   end
 end
