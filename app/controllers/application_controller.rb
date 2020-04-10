@@ -16,8 +16,6 @@ class ApplicationController < ActionController::Base
         raise ActionController::RoutingError, params[:path]
     end
 
-    
-
     private
     def current_user
         @current_user||= User.find_by(id: session[:user_id]) if session[:user_id]
@@ -30,7 +28,6 @@ class ApplicationController < ActionController::Base
     def rescue403
         render template: 'errors/forbidden', status: 403
     end
-
 
     def rescue404
         render template: 'errors/not_found', status: 404
