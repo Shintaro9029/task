@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :task, class: Task do
     id { 1 }
@@ -8,7 +10,7 @@ FactoryBot.define do
     created_at { '2020-03-03' }
     updated_at { '2020-03-03' }
   end
-  
+
   factory :second_task, class: Task do
     id { 2 }
     title { '勉強' }
