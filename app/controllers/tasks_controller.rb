@@ -5,15 +5,17 @@ class TasksController < ApplicationController
     keywords = params.dig(:q, :keywords_cont_all)&.split(/[[:space:]]/)
     params[:q][:keywords_cont_all] = keywords if keywords
     @q = current_user.tasks.ransack(params[:q])
-    @tasks = @q.result(distinct: true).page(params[:page])
+    @tasks = @q.result.includes(:labels, :task_labels).page(params[:page])
   end
 
   def show
     @task = current_user.tasks.find(params[:id])
+    @label = Label.all
   end
 
   def new
     @task = Task.new
+    @label = Label.new
   end
 
   def create
@@ -22,6 +24,7 @@ class TasksController < ApplicationController
     if @task.save
       redirect_to @task, notice: "タスク「#{@task.title}」を登録しました。"
     else
+      @label = Label.new
       render :new
     end
   end
@@ -45,7 +48,7 @@ class TasksController < ApplicationController
   private
 
   def task_params
-    params.require(:task).permit(:title, :description, :important, :status, :deadline_date)
+    params.require(:task).permit(:title, :description, :important, :status, :deadline_date, { label_ids: [] })
   end
 
   def search_params
