@@ -1,0 +1,27 @@
+inherit_from: .rubocop_todo.yml
+# 自動生成されるものはチェック対象から除外する
+AllCops:
+  Exclude:
+    - 'config.ru'
+    - 'bin/**'
+    - 'lib/**'
+    - 'db/**/*'
+    - 'config/**/*'
+    - 'script/**/*'
+
+Metrics/AbcSize:
+  Max: 30
+
+Metrics/LineLength:
+  Max: 160
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/MethodLength:
+  Max: 20
+  Exclude:
+      - "db/migrate/*.rb"
+
+# 日本語のコメントを許可する
+Style/AsciiComments:
+  Enabled: false
