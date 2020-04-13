@@ -1,9 +1,12 @@
 h1 タスク一覧
 = search_form_for @q do |f|
   = f.search_field :keywords_cont_all, required: false, label: t('helpers.keywords')
+  br
+  = f.label :label
+  = f.select :task_labels_label_id_eq, Label.order(:name).map{|m| [m.name, m.id]}, {include_blank: true}, {class: 'form-control'} 
   = f.submit
 end
-
+br
 div 
 = link_to '新規登録', new_task_path, class: 'btn btn-primary'
 
@@ -18,7 +21,7 @@ table.table.table-hover
       th= sort_link(@q, :important)
       th= Task.human_attribute_name(:status)
       th= sort_link(@q, :deadline_date)
-      th= sort_link(@q, :created_at)
+      th= Task.human_attribute_name(:label)
     tbody
       - @tasks.each do |task|
         tr
@@ -33,7 +36,10 @@ table.table.table-hover
             td= diffDate(task.deadline_date)
           - else
             td 期限が過ぎています
-          td= task.created_at
+          td
+            - task.labels.each do |label|
+              = label.name
+
           td
             = link_to '編集', edit_task_path(task), class: 'btn btn-primary mr-3'
             = link_to '削除', task, method: :delete, data: { confirm: "タスク「#{task.title}」を削除します。よろしいですか？"}, class: 'btn btn-danger'
