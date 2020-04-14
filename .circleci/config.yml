@@ -7,11 +7,11 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.2-stretch-node
         environment:
-          BUNDLER_VERSION: 2.1.4 # <= これ必須！！  
+          BUNDLER_VERSION: 2.1.4
           BUNDLE_JOBS: 3
           BUNDLE_RETRY: 3
           BUNDLE_PATH: vendor/bundle
-          PGHOST: 127.0.0.1
+          PG_HOST: 127.0.0.1
           PG_DATABASE: postgres
           PG_PASSWORD: pass
           PG_USER: postgres
@@ -27,3 +27,21 @@ jobs:
           #日本語のファイルを読み込むため
           command: 'git config --global core.quotepath false'
       - checkout
+      # bundlerのバージョンを表示
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      # bundle キャッシュをリストアする
+      - restore_cache:
+          keys:
+            - task-management-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - task-management-bundle-v2-
+      # bundle キャッシュを保存
+      - save_cache:
+          key: task-management-bundle-v2-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      #テスト結果を保存
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop
