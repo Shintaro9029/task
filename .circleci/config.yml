@@ -6,21 +6,21 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.6.2-stretch-node
-      environment:
-        BUNDLER_VERSION: 2.1.4 # <= これ必須！！  
-        BUNDLE_JOBS: 3  
-        BUNDLE_RETRY: 3
-        BUNDLE_PATH: vendor/bundle
-        PGHOST: 127.0.0.1 
-        PG_DATABASE: postgres
-        PG_PASSWORD: pass
-        PG_USER: postgres
-        SELENIUM_DRIVER_URL: http://selenium_chrome:4444/wd/hub
-        RAILS_ENV: test
+        environment:
+          BUNDLER_VERSION: 2.1.4 # <= これ必須！！  
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          PGHOST: 127.0.0.1
+          PG_DATABASE: postgres
+          PG_PASSWORD: pass
+          PG_USER: postgres
+          SELENIUM_DRIVER_URL: http://selenium_chrome:4444/wd/hub
+          RAILS_ENV: test
+      - image: postgres:9.6-alpine
+        environment:
+          POSTGRES_PASSWORD: pass
+          POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
     executor: ruby/default
     steps:
       - checkout
-      - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
