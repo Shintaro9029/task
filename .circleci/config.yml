@@ -23,4 +23,7 @@ jobs:
           POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
     executor: ruby/default
     steps:
+      - run:
+          #日本語のファイルを読み込むため
+          command: 'git config --global core.quotepath false'
       - checkout
