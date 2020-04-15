@@ -52,3 +52,15 @@ jobs:
       - run:
           name: Run rubocop
           command: bundle exec rubocop
+      #RSpecの実行
+      - run:
+          name: Run RSpec
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+      #テスト結果を保存
+      - store_test_results:
+          path: test_results
