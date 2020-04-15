@@ -68,6 +68,7 @@ end
 
 group :test do
   gem 'capybara'
+  gem 'rspec_junit_formatter'
   gem 'webdrivers'
 end
 
