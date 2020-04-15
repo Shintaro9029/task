@@ -7,9 +7,8 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.2-stretch-node
         environment:
-          BUNDLER_VERSION: 2.1.4
           BUNDLE_JOBS: 3
-          BUNDLE_RETRY: 3
+          BUNDLE_RE TRY: 3
           BUNDLE_PATH: vendor/bundle
           PG_HOST: 127.0.0.1
           PG_DATABASE: postgres
@@ -17,7 +16,7 @@ jobs:
           PG_USER: postgres
           SELENIUM_DRIVER_URL: http://selenium_chrome:4444/wd/hub
           RAILS_ENV: test
-      - image: postgres:9.6-alpine
+      - image: circleci/postgres:9.6-postgis-ram
         environment:
           POSTGRES_PASSWORD: pass
           POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
@@ -34,14 +33,18 @@ jobs:
       # bundle キャッシュをリストアする
       - restore_cache:
           keys:
-            - task-management-bundle-v2-{{ checksum "Gemfile.lock" }}
-            - task-management-bundle-v2-
+            - task-bundle-v2-{{ checksum "Gemfile.lock" }}
+            - task-bundle-v2-
+      - run:
+          name: install dependencies
+          command: |
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
       # bundle キャッシュを保存
       - save_cache:
-          key: task-management-bundle-v2-{{ checksum "Gemfile.lock" }}
+          key: task-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      #テスト結果を保存
+      #rubocop
       - run:
           name: Run rubocop
           command: bundle exec rubocop

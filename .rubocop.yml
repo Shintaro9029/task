@@ -1,6 +1,7 @@
 inherit_from: .rubocop_todo.yml
 # 自動生成されるものはチェック対象から除外する
 AllCops:
+  TargetRubyVersion: 2.6
   Exclude:
     - 'config.ru'
     - 'bin/**'
@@ -8,11 +9,12 @@ AllCops:
     - 'db/**/*'
     - 'config/**/*'
     - 'script/**/*'
+    - 'vendor/**/*'
 
 Metrics/AbcSize:
   Max: 30
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 160
   Exclude:
     - "db/migrate/*.rb"
@@ -21,6 +23,17 @@ Metrics/MethodLength:
   Max: 20
   Exclude:
       - "db/migrate/*.rb"
+
+Documentation:
+  Enabled: false
+
+Style/HashSyntax:
+  Exclude:
+    - "**/*.rake"
+    - "Rakefile"
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
 
 # 日本語のコメントを許可する
 Style/AsciiComments:
