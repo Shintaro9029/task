@@ -53,6 +53,15 @@ jobs:
       - run:
           name: Run rubocop
           command: bundle exec rubocop
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Create db
+          command: bundle exec rails db:create
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
       #RSpecの実行
       - run:
           name: Run RSpec

@@ -18,7 +18,7 @@ default: &default
   database: <%= ENV['PG_DATABASE'] %>
   username: <%= ENV['PG_USER'] %>
   password: <%= ENV['PG_PASSWORD'] %>
-  host: db
+  host: <%= ENV.fetch("PG_HOST") { 'db' } %>
 
   adapter: postgresql
   encoding: unicode
