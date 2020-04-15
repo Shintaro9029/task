@@ -7,6 +7,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.2-stretch-node
         environment:
+          BUNDLER_VERSION: 2.1.4
           BUNDLE_JOBS: 3
           BUNDLE_RE TRY: 3
           BUNDLE_PATH: vendor/bundle
@@ -26,6 +27,13 @@ jobs:
           #日本語のファイルを読み込むため
           command: 'git config --global core.quotepath false'
       - checkout
+      #bundleのアップデート
+      - run:
+          name: Install bundle
+          command: |
+            gem install bundle 
+            bundle install --path vendor/bundle
+            bundle install --jobs=4 --retry=3
       # bundlerのバージョンを表示
       - run:
           name: Which bundler?
@@ -35,16 +43,12 @@ jobs:
           keys:
             - task-bundle-v2-{{ checksum "Gemfile.lock" }}
             - task-bundle-v2-
-      - run:
-          name: install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
       # bundle キャッシュを保存
       - save_cache:
           key: task-bundle-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - vendor/bundle
-      #rubocop
+      #rubocopの実行
       - run:
           name: Run rubocop
           command: bundle exec rubocop
