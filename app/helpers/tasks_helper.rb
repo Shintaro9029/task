@@ -3,7 +3,7 @@
 module TasksHelper
   require 'date'
 
-  def diffDate(deadline_date)
+  def diff_date(deadline_date)
     today = Date.current
     diff = (deadline_date - today).to_i
     "あと#{diff}日"
