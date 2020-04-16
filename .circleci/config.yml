@@ -7,7 +7,6 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.2-stretch-node
         environment:
-          BUNDLER_VERSION: 2.1.4
           BUNDLE_JOBS: 3
           BUNDLE_RE TRY: 3
           BUNDLE_PATH: vendor/bundle
