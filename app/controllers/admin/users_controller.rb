@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Admin::UsersController < ApplicationController
   before_action :require_admin
-  
+
   def index
     @q = User.ransack(params[:q])
     @users = @q.result.eager_load(:tasks).page(params[:page])
@@ -44,7 +46,7 @@ class Admin::UsersController < ApplicationController
     @user = User.find(params[:id])
     if @user.destroy
       redirect_to admin_users_path, notice: "ユーザー「#{@user.name}」を削除しました。"
-    elsif 
+    else
       flash[:danger] = '管理者がいなくなるので削除できません'
       redirect_to admin_users_path
     end

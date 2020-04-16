@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :task, class: Task do
     id { 1 }
@@ -7,8 +9,9 @@ FactoryBot.define do
     status { '完了' }
     created_at { '2020-03-03' }
     updated_at { '2020-03-03' }
+    user
   end
-  
+
   factory :second_task, class: Task do
     id { 2 }
     title { '勉強' }
@@ -17,5 +20,6 @@ FactoryBot.define do
     status { '未着手' }
     created_at { '2020-04-04' }
     updated_at { '2020-04-04' }
+    user
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TasksController < ApplicationController
   def index
     keywords = params.dig(:q, :keywords_cont_all)&.split(/[[:space:]]/)
@@ -52,5 +54,4 @@ class TasksController < ApplicationController
   def search_params
     params.require(:q).permit!
   end
-
 end
