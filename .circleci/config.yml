@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2 
+  ruby: circleci/ruby@0.1.2
+  aws-ecr: circleci/aws-ecr@6.8.2
 
 jobs:
   build:
@@ -73,3 +74,14 @@ jobs:
       #テスト結果を保存
       - store_test_results:
           path: test_results
+
+workflows:
+  build-and-deploy:
+    jobs:
+      - aws-ecr/build_and_push_image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          repo: ${MY_APP_PREFIX}
+          
