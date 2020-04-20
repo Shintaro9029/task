@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@0.1.2
   aws-ecr: circleci/aws-ecr@6.8.2
+  aws-ecs: circleci/aws-ecs@1.1.0
 
 jobs:
   build:
@@ -85,3 +86,10 @@ workflows:
           region: AWS_REGION
           repo: ${MY_APP_PREFIX}
           tag: ${CIRCLE_SHA1}
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          family: '${MY_APP_PREFIX}-task'
+          service-name: '${MY_APP_PREFIX}-service'
+          cluster-name: '${MY_APP_PREFIX}-ecs-cluster'
+          container-image-name-updates: 'container=app ,tag=${CIRCLE_SHA1}'
