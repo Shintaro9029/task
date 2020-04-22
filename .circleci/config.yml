@@ -91,5 +91,5 @@ workflows:
             - aws-ecr/build-and-push-image
           family: '${MY_APP_PREFIX}-task'
           service-name: '${MY_APP_PREFIX}-service'
-          cluster-name: '${MY_APP_PREFIX}-ecs-cluster'
+          cluster-name: '${MY_APP_PREFIX}-cluster'
           container-image-name-updates: 'container=app ,tag=${CIRCLE_SHA1}'
