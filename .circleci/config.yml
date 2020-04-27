@@ -1,6 +1,8 @@
 version: 2.1
 orbs:
-  ruby: circleci/ruby@0.1.2 
+  ruby: circleci/ruby@0.1.2
+  aws-ecr: circleci/aws-ecr@6.8.2
+  aws-ecs: circleci/aws-ecs@1.1.0
 
 jobs:
   build:
@@ -73,3 +75,21 @@ jobs:
       #テスト結果を保存
       - store_test_results:
           path: test_results
+
+workflows:
+  build_and_push_image:
+    jobs:
+      - aws-ecr/build-and-push-image:
+          account-url: AWS_ECR_ACCOUNT_URL
+          aws-access-key-id: AWS_ACCESS_KEY_ID
+          aws-secret-access-key: AWS_SECRET_ACCESS_KEY
+          region: AWS_REGION
+          repo: ${MY_APP_PREFIX}
+          tag: ${CIRCLE_SHA1}
+      - aws-ecs/deploy-service-update:
+          requires:
+            - aws-ecr/build-and-push-image
+          family: '${MY_APP_PREFIX}'
+          service-name: '${MY_APP_PREFIX}'
+          cluster-name: '${MY_APP_PREFIX}-cluster'
+          container-image-name-updates: 'container=app ,tag=${CIRCLE_SHA1}'

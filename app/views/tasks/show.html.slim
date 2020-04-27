@@ -26,7 +26,7 @@ table.table.table-hover
         td= simple_format(h(@task.description), {}, sanitize: false,wrapper_tag: "div")
       tr
         th= Task.human_attribute_name(:deadline_date)
-        td= diffDate(@task.deadline_date)
+        td= diff_date(@task.deadline_date)
       tr
         th= Task.human_attribute_name(:status)
         td= @task.status
